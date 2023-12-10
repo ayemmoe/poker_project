@@ -45,13 +45,17 @@ class Deck:
         self.deck = dict(sorted(updated_deck.items()))
         return self.deck
     
-    def deal_one_card(self):
+    def deal_one_card(self, player):
         """
         Method to deal one card from the top, the highest position number in the deck is the top card
+
+        :param player: name of player
+        :return updated player object
         """
         top_card = None
         if self.top_position > 0 and self.deck:
             top_card = self.deck[self.top_position]
             del self.deck[self.top_position]
             self.top_position -= 1            
+            player.cards.append(top_card)
         return top_card

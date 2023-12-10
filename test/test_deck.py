@@ -1,6 +1,7 @@
 import unittest
 
 from items.deck import Deck
+from items.player import Player
 
 
 class TestDeck(unittest.TestCase):
@@ -55,16 +56,18 @@ class TestDeck(unittest.TestCase):
         """
         test deal_one_card method
         """
+        player_one = Player('Amy')
         for number in range(1, 53):
             top_card = self.deck_obj.deck[self.deck_obj.top_position]
             top_card_info = top_card.get_card_info()
-            deal = self.deck_obj.deal_one_card()
+            deal = self.deck_obj.deal_one_card(player_one)
             deal_card_info = deal.get_card_info()
 
             self.assertDictEqual(top_card_info, deal_card_info, 'Failed to validate the top card is the same as '
                                                                 'the deal card')
             self.assertEqual(len(self.deck_obj.deck), 52-number, f'Failed to validate the size of the deck is '
                                                                  f'reduced to {52-number} after the {number} deal')
+            self.assertEqual(player_one.get_card_counts(), number, 'Failed to validate player one card count increased')
 
 
 class TestDeckEmpty(unittest.TestCase):
@@ -85,8 +88,12 @@ class TestDeckEmpty(unittest.TestCase):
         """
         Test deal_one_card method to an empty deck object
         """
-        deal_card = self.deck_obj.deal_one_card()
+        player_two = Player('David')
+        deal_card = self.deck_obj.deal_one_card(player_two)
+        print(f'{player_two.name} cards', player_two.cards)
+        print('david card counts', player_two.get_card_counts())
         self.assertIsNone(deal_card, 'Failed to validate deal card is None')
+        self.assertEqual(player_two.get_card_counts(), 0, 'Failed to validate player 2 card count not change')
 
 
 if __name__ == '__main__':
